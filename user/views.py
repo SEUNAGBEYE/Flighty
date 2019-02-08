@@ -9,7 +9,7 @@ from .renderers import UserJSONRenderer
 
 from rest_framework.generics import RetrieveAPIView
 
-from flighty.exceptions import UserProfileDoesNotExist
+
 from .models import UserProfile
 
 

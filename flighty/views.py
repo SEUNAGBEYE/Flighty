@@ -8,3 +8,4 @@ from rest_framework.response import Response
 def index(request):
     content = {'message': 'Welcome to Fligty'}
     return Response(content)
+    
