@@ -7,11 +7,13 @@ from rest_framework.response import Response
 
 @api_view(['GET'])
 @permission_classes((AllowAny, ))
-def index():
-    """Handles / request
+def index(request): #pylint: disable=unused-arguments, bad-option-value
+    """Handles /api/v1 request
 
-    Returns:
-        JSON: Welcome to Flighty
+        Args:
+            request (request object): Django request object
+        Returns:
+            JSON: Welcome to Flighty
     """
 
     content = {'message': 'Welcome to Fligty'}
