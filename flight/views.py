@@ -63,3 +63,18 @@ class FlightRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         serializer = self.serializer_class(flight)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def update(self, request, *args, **kwargs):
+        """Updates a flight"""
+        user_data = request.data
+
+        flight = get_object_or_404(Flight.objects.all(), pk=kwargs['id'])
+        # Here is that serialize, validate, save pattern we talked about
+        # before.
+        serializer = self.serializer_class(
+            flight, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

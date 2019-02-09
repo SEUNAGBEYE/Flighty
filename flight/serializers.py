@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Flight
+from flighty.validators.choice_validators import choice_validator
 
 
 class FlightSerializer(serializers.ModelSerializer):
@@ -11,7 +12,8 @@ class FlightSerializer(serializers.ModelSerializer):
     origin = serializers.CharField(max_length = 100)
     destination = serializers.CharField(max_length = 100)
     airline_code = serializers.CharField(max_length = 100)
-    status = serializers.CharField(max_length = 100)
+    status = serializers.CharField(max_length = 100, validators=[choice_validator(Flight.STATUS_CHOICES)], source='get_status_display')
+    flight_class = serializers.CharField(max_length = 100, validators=[choice_validator(Flight.CLASS_CHOICES)], required=False, source='get_flight_class_display')
     fare = serializers.FloatField()
     one_way = serializers.BooleanField()
     stops = serializers.IntegerField(default=0)
@@ -29,13 +31,13 @@ class FlightSerializer(serializers.ModelSerializer):
             flight data
         """
 
-        one_way = data.get('one_way')
-        return_date = data.get('return_date')
+        one_way = data.get('one_way', ' ')
+        return_date = data.get('return_date', ' ')
         if not one_way and not return_date:
             raise serializers.ValidationError('return_date must be provided for returned flights')
         
         if (one_way and return_date) or one_way and not return_date:
-            del data['return_date']
+            data.pop('return_date', '')
 
         return data
 
@@ -51,7 +53,8 @@ class FlightSerializer(serializers.ModelSerializer):
             'status',
             'fare',
             'one_way',
-            'stops'
+            'stops',
+            'flight_class'
         )
         read_only_fields = ('id',)
 
