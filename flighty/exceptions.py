@@ -1,6 +1,6 @@
-from rest_framework.views import exception_handler
-from rest_framework.exceptions import APIException
+"""Module for handling exceptions"""
 
+from rest_framework.views import exception_handler
 
 
 def core_exception_handler(exc, context):

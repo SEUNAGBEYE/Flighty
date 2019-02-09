@@ -22,5 +22,6 @@ from flighty.views import index
 # pylint: disable=invalid-name
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', index, name='entry_point'),
+    url(r'^api/v1/$', index, name='entry_point'),
+    url(r'^api/v1/users/', include('user.urls', namespace='user')),
 ]
