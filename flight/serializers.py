@@ -59,7 +59,7 @@ class FlightSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
     def update(self, instance, validated_data):
-        """Performs an update on a User."""
+        """Updates Flights"""
 
 
         for (key, value) in validated_data.items():
@@ -75,6 +75,6 @@ class FlightSerializer(serializers.ModelSerializer):
         return instance
     
     def create(self):
-        """Performs an update on a User."""
+        """Creates Flights"""
         
         return Flight.objects.get_or_create(**self.validated_data)

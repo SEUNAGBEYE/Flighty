@@ -64,7 +64,8 @@ class TicketSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'total_fare')
     
     def validate(self, data):
-        # import pdb; pdb.set_trace()
+        """Validates ticket information"""
+
         flight = Flight.objects.get(pk=data['flight_id'])
         booked_tickets = Flight.objects.filter(ticket__is_ticketed=True).count()
         available_space = flight.travellers_capacity - booked_tickets
@@ -76,7 +77,7 @@ class TicketSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        """Performs an update on a User."""
+        """Updates tickets"""
         passengers = validated_data.pop('passengers', [])
 
         for (key, value) in validated_data.items():
@@ -90,7 +91,7 @@ class TicketSerializer(serializers.ModelSerializer):
         instance.save()
 
         for passenger in passengers:
-            passenger_instance = Ticket.filter(passenger__pk=passenger['id'])
+            passenger_instance = Ticket.objects.filter(passengers__email=passenger['email']).first()
             if passenger:
                 for (key, value) in passenger.items():
                     setattr(passenger_instance, key, value)
@@ -99,7 +100,8 @@ class TicketSerializer(serializers.ModelSerializer):
         return instance
     
     def create(self):
-        """Performs an update on a User."""
+        """Creates tickets"""
+
         user_id = self.context['user'].id
         passengers = self.validated_data.pop('passengers', [])
         self.validated_data['user_id'] = user_id

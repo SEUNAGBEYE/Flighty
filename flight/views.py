@@ -20,9 +20,6 @@ class FlightListCreate(APIView):
 
     def get(self, request, *args, **kwargs):
         """Gets all flights"""
-        # There is nothing to validate or save here. Instead, we just want the
-        # serializer to handle turning our `User` object into something that
-        # can be JSONified and sent to the client.
 
         response= Flight.objects.all()
         serializer = self.serializer_class(response, many=True)
@@ -31,9 +28,6 @@ class FlightListCreate(APIView):
     def post(self, request, *args, **kwargs):
         """Creates flights"""
 
-        # There is nothing to validate or save here. Instead, we just want the
-        # serializer to handle turning our `User` object into something that
-        # can be JSONified and sent to the client.
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.create()
@@ -48,10 +42,6 @@ class FlightRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     def get(self, request, *args, **kwargs):
         """Gets a single flight
         """
-
-        # There is nothing to validate or save here. Instead, we just want the
-        # serializer to handle turning our `User` object into something that
-        # can be JSONified and sent to the client.
 
         data = {
             'origin': request.query_params.get('origin', ''),
