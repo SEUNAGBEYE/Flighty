@@ -24,4 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/v1/$', index, name='entry_point'),
     url(r'^api/v1/users/', include('user.urls', namespace='user')),
+    url(r'^api/v1/flights/', include('flight.urls')),
 ]
