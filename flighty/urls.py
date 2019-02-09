@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^api/v1/$', index, name='entry_point'),
     url(r'^api/v1/users/', include('user.urls', namespace='user')),
     url(r'^api/v1/flights/', include('flight.urls')),
+    url(r'^api/v1/tickets/', include('ticket.urls')),
 ]
