@@ -23,7 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dqi8e^sl$s9(c$7q^#r3ex*kkxg92e4+*o6hu!rr9jmy5klhl('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ['DJANGO_ENV'] in ['development', 'testing']:
+    DEBUG = True
+else:
+     DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -31,6 +34,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'flight.apps.FlightConfig',
+    'user.apps.UserConfig',
+    'ticket.apps.TicketConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
