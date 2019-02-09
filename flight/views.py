@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import FlightSerializer
 
 from .models import Flight
+from ticket.models import Passenger
 
 from .permissions import IsAdminUserOrReadOnly
 
@@ -68,3 +69,36 @@ class FlightRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FlightReservation(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = FlightSerializer
+
+    def get(self, request, *args, **kwargs):
+        # There is nothing to validate or save here. Instead, we just want the
+        # serializer to handle turning our `User` object into something that
+        # can be JSONified and sent to the client.
+
+        date_string = request.query_params.get('date')
+
+        try:
+            date = datetime.strptime(date_string, '%Y-%m-%d')
+        except Exception as e:
+
+            response = {'errors': {
+                'date': [f'date={date_string} does not match this format Y-M-D']
+            }}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+        flight = get_object_or_404(Flight.objects.all(), pk=kwargs['id'])
+
+
+        reservations = Passenger.objects.filter(ticket__is_ticketed=True, ticket__flight_id=flight.id, ticket__created_at__date=date).count()
+        available_seats = flight.travellers_capacity - reservations
+        serializer = self.serializer_class(flight)
+        return Response({'data': {
+            'reservations': reservations,
+            'available_seats': available_seats,
+            'flight': serializer.data
+        }}, status=status.HTTP_200_OK)
