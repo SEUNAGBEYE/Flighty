@@ -39,3 +39,27 @@ class FlightListCreate(APIView):
         serializer.create()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class FlightRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAdminUserOrReadOnly,)
+    serializer_class = FlightSerializer
+
+    def get(self, request, *args, **kwargs):
+        """Gets a single flight
+        """
+
+        # There is nothing to validate or save here. Instead, we just want the
+        # serializer to handle turning our `User` object into something that
+        # can be JSONified and sent to the client.
+
+        data = {
+            'origin': request.query_params.get('origin', ''),
+            'destination': request.query_params.get('destination', ''),
+            'departure_date': request.query_params.get('departureDate', '')
+        }
+
+        flight = get_object_or_404(Flight.objects.all(), pk=kwargs['id'])
+        serializer = self.serializer_class(flight)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
