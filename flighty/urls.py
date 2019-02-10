@@ -19,11 +19,18 @@ from django.conf.urls import url
 
 from flighty.views import index
 
+from django.conf import settings 
+from django.conf.urls.static import static
+
 # pylint: disable=invalid-name
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/v1/$', index, name='entry_point'),
+    url(r'^$', index, name='entry_point'),
     url(r'^api/v1/users/', include('user.urls', namespace='user')),
     url(r'^api/v1/flights/', include('flight.urls')),
     url(r'^api/v1/tickets/', include('ticket.urls')),
 ]
+
+if settings.DEBUG:
+  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

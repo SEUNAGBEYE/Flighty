@@ -1,9 +1,11 @@
 """User Serializers"""
+from datetime import datetime
 
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
 from .models import User, UserProfile
+from .tasks import delete_passport_image
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -101,18 +103,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(allow_blank=True, required=False)
     last_name = serializers.CharField(allow_blank=True, required=False)
     state = serializers.CharField(allow_blank=True, required=False)
-    image = serializers.SerializerMethodField()
+    image = serializers.ImageField()
 
     #pylint: disable=missing-docstring
     class Meta:
         model = UserProfile
         fields = ('image', 'city', 'house_address', 'last_name','first_name', 'state')
-
-    def get_image(self, obj):
-        if obj.image:
-            return obj.image
-
-        return 'https://static.productionready.io/images/smiley-cyrus.jpg'
 
 class UserSerializer(serializers.ModelSerializer):
     """Handles serialization and deserialization of User objects."""
@@ -146,6 +142,24 @@ class UserSerializer(serializers.ModelSerializer):
         # field.
         read_only_fields = ('token',)
 
+    def validate(self, data):
+        """
+        Validates user profile info
+        """
+        delete_image = self.context.get('deleteImage')
+        user = self.context.get('user')
+        image_path = user.userprofile.image
+        if delete_image:
+            data['userprofile']['image'] = ''
+            if image_path:
+                delete_passport_image.delay(image_path.path)
+
+        image = data['userprofile'].get('image')
+        if not delete_image and image:
+            username = user.email.split('@')[0]
+            ext = image.name.split('.')[-1]
+            data['userprofile']['image'].name = f'{image}-{username}-{datetime.now()}.{ext}'
+        return data
 
     def update(self, instance, validated_data):
         """Performs an update on a User."""
