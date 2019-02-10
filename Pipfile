@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 django = "*"
 yapf = "*"
+django-celery-email = "*"
+django-celery = "*"
+celery = "==4.2.1"
 
 [dev-packages]
 

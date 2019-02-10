@@ -94,7 +94,22 @@ Coming Soon!
     Quit the server with CONTROL-C.
     ```
 
+- Run Celery
+  ```
+    celery -A flighty worker --loglevel=debug --concurrency=2
+  ```
 
+- Run Celery Beat
+  ```
+  celery -A flighty beat -l INFO
+  ```
+
+- Run RabbitMQ
+  ```
+  rabbitmq-server
+
+  export PATH=$PATH:/usr/local/sbin
+  ```
 
 -   Deactivate the virtual environment once you're done:
     ```

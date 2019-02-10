@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,6 +29,16 @@ if os.environ['DJANGO_ENV'] in ['development', 'testing']:
 else:
      DEBUG = False
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_USE_TLS = True
+
+CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
+CELERY_TIMEZONE = 'Africa/Lagos'
+
 ALLOWED_HOSTS = []
 
 
@@ -39,6 +50,8 @@ INSTALLED_APPS = [
     'flight.apps.FlightConfig',
     'user.apps.UserConfig',
     'ticket.apps.TicketConfig',
+    'djcelery_email',
+    'djcelery',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +59,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+CELERY_BEAT_SCHEDULE = {
+    'send-travel-reminder-a-day-before': {
+        'task': 'send_travel_notification',
+        'schedule': crontab(hour=0, minute=0) # Runs every midnight. But replace with this for testing purpose crontab(minute="*/1")
+    }
+}
 
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'flighty.exceptions.core_exception_handler',
@@ -70,7 +90,7 @@ ROOT_URLCONF = 'flighty.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 

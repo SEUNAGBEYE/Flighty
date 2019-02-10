@@ -73,7 +73,8 @@ class TicketSerializer(serializers.ModelSerializer):
         if flight and number_of_travellers > available_space:
             raise serializers.ValidationError('Number of passengers is greater than the available seat')
         else:
-            data['number_of_travellers'] = number_of_travellers
+            data['number_of_travellers'] = number_of_travellers  
+        data['flight'] = flight
         return data
 
     def update(self, instance, validated_data):
@@ -113,4 +114,4 @@ class TicketSerializer(serializers.ModelSerializer):
                 passenger['ticket'] = ticket
                 passenger_instances.append(Passenger(**passenger))
             Passenger.objects.bulk_create(passenger_instances)
-        return ticket
+        return ticket, created
