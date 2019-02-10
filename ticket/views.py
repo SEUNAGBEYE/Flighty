@@ -14,6 +14,8 @@ from .models import Ticket
 from .permissions import TicketPermission
 from .renderers import TicketJSONRenderer
 
+from .tasks import send_e_ticket
+
 
 class TicketListCreate(APIView):
     permission_classes = (TicketPermission,)
@@ -26,7 +28,7 @@ class TicketListCreate(APIView):
         If the current user is an admin, it gets all the tickets in the databse
         """
 
-        response= Ticket.objects.filter(user__pk=request.user.id)
+        response = Ticket.objects.filter(user__pk=request.user.id)
         serializer = self.serializer_class(response, many=True)
         return Response({'data': serializer.data}, status=status.HTTP_200_OK)
     
@@ -35,8 +37,9 @@ class TicketListCreate(APIView):
 
         serializer = self.serializer_class(data=request.data, context={'user': request.user})
         serializer.is_valid(raise_exception=True)
-        serializer.create()
-
+        _, created = serializer.create()
+        if created:
+            send_e_ticket.delay(serializer.data, request.user.email, 'Your E Ticket')
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class TicketRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):

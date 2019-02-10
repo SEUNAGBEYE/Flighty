@@ -1,0 +1,205 @@
+<html data-start-index="5" data-end-index="11"><head data-start-index="16" data-end-index="22">
+    <title data-start-index="29" data-end-index="36"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" data-start-index="51" data-end-index="119">
+    <style data-start-index="126" data-end-index="133">
+    
+      body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 80vw;
+        justify-content: space-between;
+      }
+      
+      header {
+        padding: 1.25rem 3.375rem;
+        background: linear-gradient(93deg,#2889e3,#489be8 15%,#745afa 47%,#f22f46 88%,#f22f46);
+        color: #fff;
+        width: 100%;
+      }
+      
+      .table-div {
+        width: 100%;
+        overflow-x: auto;
+        margin: 1em;
+        tab-size: 12px;
+      }
+      
+      table {
+          border-collapse: collapse;
+          border-spacing: 0;
+          width: 100%;
+          border: 1px solid #ddd;
+          margin-top: 1rem;
+      }
+      
+      th {
+        padding: 1rem;
+        background: #2196f3;
+        color: #fff;
+        font-size: 10px
+      }
+      
+      .table-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        overflow-x: none;
+        
+      }
+      
+      th, td {
+        text-align: left;
+        padding: 0.6rem;
+      }
+      
+      tr:nth-child(even){
+        background-color: #f2f2f2;
+      }
+    
+  </style>
+  </head>
+  <body data-start-index="1425" data-end-index="1431">
+    <header data-start-index="1438" data-end-index="1446">Flighty</header>
+    <div class="table-container" data-start-index="1469" data-end-index="1498">
+      Hi,
+      {%if body %}
+        <p> {{ body }}</p>
+      {% endif %}
+      Thanks for using Flighty. Please find your e-ticket below.
+      <div class="table-div" data-start-index="1518" data-end-index="1541">
+          Ticket's Info
+          <table data-start-index="1580" data-end-index="1587">
+            <thead data-start-index="1599" data-end-index="1606">
+              <tr data-start-index="1620" data-end-index="1624">
+                  <th data-start-index="1639" data-end-index="1643">Ticket No</th>
+                  <th data-start-index="1672" data-end-index="1676">Number of Travellers</th>
+                  <th data-start-index="1713" data-end-index="1717">Form of Payment</th>
+                  <th data-start-index="1752" data-end-index="1756">Valid till</th>
+                  <th data-start-index="1786" data-end-index="1790">Amount</th>
+              </tr>
+            </thead>
+            <tbody data-start-index="1852" data-end-index="1859"> 
+              <tr data-start-index="1873" data-end-index="1877">
+                  <td data-start-index="1892" data-end-index="1896">
+                    {{ ticket.ticket_no }}
+                  </td>
+                  <td data-start-index="1892" data-end-index="1896">
+                    {{ ticket.number_of_travellers }}</td>
+                  <td data-start-index="1892" data-end-index="1896">
+                    {{ ticket.form_of_payment }}
+                  </td>
+                  <td data-start-index="1892" data-end-index="1896">
+                    {{ ticket.valid_till }}
+                  </td>
+                  <td data-start-index="1892" data-end-index="1896">
+                    {{ ticket.total_fare }}
+                  </td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+      
+      <div class="table-div" data-start-index="2213" data-end-index="2236">
+        Flight's Info
+        <table data-start-index="2271" data-end-index="2278">
+            <thead data-start-index="2290" data-end-index="2297">
+              <tr data-start-index="2311" data-end-index="2315">
+                  <th data-start-index="2330" data-end-index="2334">Origin</th>
+                  <th data-start-index="2360" data-end-index="2364">Destination</th>
+                  <th data-start-index="2395" data-end-index="2399">Class</th>
+                  <th data-start-index="2424" data-end-index="2428">Status</th>
+                  <th data-start-index="2454" data-end-index="2458">Fare</th>
+                  <th data-start-index="2482" data-end-index="2486">Departure Date</th>
+                  <th data-start-index="2520" data-end-index="2524">Return Date</th>
+                  <th data-start-index="2555" data-end-index="2559">Airline</th>
+                  <th data-start-index="2586" data-end-index="2590">Stops</th>
+              </tr>
+            </thead>
+            <tbody data-start-index="2651" data-end-index="2658">
+              <tr data-start-index="2672" data-end-index="2676">
+                  <td data-start-index="2691" data-end-index="2695">
+                    {{ flight.origin }}
+                  
+                  </td>
+                  <td data-start-index="2728" data-end-index="2732">
+                    {{ flight.destination }}
+                .
+                  <td data-start-index="2758" data-end-index="2762">
+                    {{ flight.flight_class }}
+                  </td>
+                  <td data-start-index="2758" data-end-index="2762">
+                    {{ flight.status }}
+                  </td>
+                  <td data-start-index="2758" data-end-index="2762">
+                    {{ flight.fare }}
+                  </td>
+                  <td data-start-index="2758" data-end-index="2762">
+                    {{ flight.departure_date }}
+                  </td>
+                  <td data-start-index="2758" data-end-index="2762">
+                    {{ flight.return_date }}
+                  </td>
+                  <td data-start-index="2758" data-end-index="2762">
+                    {{ flight.airline_code }}
+                  </td>
+                  <td data-start-index="2758" data-end-index="2762">
+                    {{ flight.stops }}
+                  </td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+  
+      
+      <div class="table-div" data-start-index="3017" data-end-index="3040">
+          Passengers' Info
+          <table data-start-index="3082" data-end-index="3089">
+            <thead data-start-index="3101" data-end-index="3108">
+              <tr data-start-index="3122" data-end-index="3126">
+                  <th data-start-index="3141" data-end-index="3145">Name</th>
+                  <th data-start-index="3169" data-end-index="3173">Email</th>
+                  <th data-start-index="3198" data-end-index="3202">Nationality</th>
+                  <th data-start-index="3233" data-end-index="3237">Passport No</th>
+                  <th data-start-index="3268" data-end-index="3272">Issurance Country</th>
+                  <th data-start-index="3309" data-end-index="3313">Expiration Date</th>
+                  <th data-start-index="3348" data-end-index="3352">Telephone</th>
+              </tr>
+            </thead>
+            <tbody data-start-index="3417" data-end-index="3424">
+              {% for passenger in passengers %}
+                <tr data-start-index="3438" data-end-index="3442">
+                    <td data-start-index="3457" data-end-index="3461">
+                      {{ passenger.name }}
+                    </td>
+                    <td data-start-index="3494" data-end-index="3498">
+                      {{ passenger.email }}
+                    </td>
+                    <td data-start-index="3524" data-end-index="3528">
+                      {{ passenger.nationality }}
+
+                    </td>
+                    <td data-start-index="3524" data-end-index="3528">
+                      {{ passenger.passport_no }}
+
+                    </td>
+                    <td data-start-index="3524" data-end-index="3528">
+                      {{ passenger.issurance_country }}
+                    </td>
+                    <td data-start-index="3524" data-end-index="3528">
+                      {{ passenger.expiration_date }}
+                    </td>
+                    <td data-start-index="3524" data-end-index="3528">
+                      {{ passenger.telephone }}
+                    </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+      </div>
+      
+    </div>
+  
+  
+</body></html>

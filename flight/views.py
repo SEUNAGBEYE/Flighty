@@ -32,7 +32,6 @@ class FlightListCreate(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.create()
-
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -76,9 +75,7 @@ class FlightReservation(APIView):
     serializer_class = FlightSerializer
 
     def get(self, request, *args, **kwargs):
-        # There is nothing to validate or save here. Instead, we just want the
-        # serializer to handle turning our `User` object into something that
-        # can be JSONified and sent to the client.
+        """Gets the reservations for a specific flight on a specific day"""
 
         date_string = request.query_params.get('date')
 
