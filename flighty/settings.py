@@ -47,11 +47,10 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'user.User'
 
 INSTALLED_APPS = [
+    'rest_framework',
     'flight.apps.FlightConfig',
     'user.apps.UserConfig',
     'ticket.apps.TicketConfig',
-    'djcelery_email',
-    'djcelery',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -154,3 +153,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

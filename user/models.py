@@ -103,9 +103,8 @@ class UserProfile(TimestampedModel):
         'User', on_delete=models.CASCADE
     )
 
-    # In addition to the `bio` field, each user may have a profile image or
-    # avatar. This field is not required and it may be blank.
-    image = models.URLField(blank=True)
+    # This field is not required and it may be blank.
+    image = models.ImageField(blank=True, default='default.png')
 
     house_address = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
