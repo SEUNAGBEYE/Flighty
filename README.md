@@ -8,23 +8,16 @@ A flight booking app to automate processes around booking flights.
 - Log in
 - Upload passport photographs
 - Book tickets
-- Receive tickets as an email
+- Receive e-tickets as an email
 - Check the status of their flight
 - Make flight reservations
-- Purchase tickets (you can add a payment gateway. Since it won't be used live you can always use a dummy card)
- 
+- Purchase tickets
  
 
-The flight booking system should be able to:
-
-encrypt password
-handle multiple requests
-optimize via caching and multithreading
 
 ### API Documentation
-```
-Coming Soon!
-```
+
+[Flighty](https://documenter.getpostman.com/view/2969248/RztrHmL7)
 
 ### Development set up
 
@@ -49,13 +42,10 @@ Coming Soon!
     ```
     pipenv --version
     >> pipenv, version 2018.6.25
-    ```
--   Check that postgres is installed:
 
+    Please install pipenv if not installed
     ```
-    postgres --version
-    >> postgres (PostgreSQL) 10.1
-    ```
+
 
 -   Clone the flighty repo and cd into it:
 
@@ -74,6 +64,17 @@ Coming Soon!
     ```
     pipenv install --dev
     ```
+  
+- Create a `.env` file
+
+
+  create a .env file and populate the the following env variable
+```
+SECRET_KEY=<JWT-SECRET-KEY>
+DJANGO_ENV=<YOUR ENVIRONMENT> This should be set to development
+EMAIL_HOST_USER = <email address for sending notification> gmail,yahoo, e.t.c
+EMAIL_HOST_PASSWORD = <password for the above email address>
+```
 
 
 -   Activate a virtual environment:
@@ -87,7 +88,6 @@ Coming Soon!
 -   Run the application:
 
     ```
-    cd flighty
     python manage.py runserver
     >>> Django version 2.1.5, using settings 'flighty.settings'
     Starting development server at http://127.0.0.1:8000/
@@ -96,7 +96,7 @@ Coming Soon!
 
 - Run Celery
   ```
-    celery -A flighty worker --loglevel=debug --concurrency=2
+    celery -A flighty worker --loglevel=debug
   ```
 
 - Run Celery Beat
@@ -121,7 +121,7 @@ Coming Soon!
 ##### Contributing
 
 All proposals for contribution must satisfy the guidelines in the product wiki.
-When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.This Project shall be utilising a [Pivotal Tracker board](https://www.pivotaltracker.com/n/projects/2170023) to track the work done.
+When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.This Project shall be utilising a [Pivotal Tracker board](https://www.pivotaltracker.com/n/projects/2237877) to track the work done.
 
 ##### Pull Request Process
 
