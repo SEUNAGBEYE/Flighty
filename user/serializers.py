@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 
 from .models import User, UserProfile
 from .tasks import delete_passport_image
+from .messages.error import LOGIN_FAIL
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -75,7 +76,7 @@ class LoginSerializer(serializers.Serializer):
         # `authenticate` will return `None`. Raise an exception in this case.
         if user is None:
             raise serializers.ValidationError(
-                'A user with this email and password was not found.'
+                LOGIN_FAIL
             )
 
         # Django provides a flag on our `User` model called `is_active`. The

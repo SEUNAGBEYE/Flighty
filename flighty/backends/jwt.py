@@ -10,6 +10,7 @@ from django.conf import settings
 from rest_framework import authentication, exceptions
 
 from user.models import User
+from flighty.messages.error import COULD_NOT_DECODE_TOKEN, DELETED_USER, DEACTIVATED_USER
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
@@ -62,11 +63,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
         auth_header_prefix = auth_header[0].decode('utf-8')
         token = auth_header[1].decode('utf-8')
-
-        if prefix != auth_header_prefix.lower():
-            # The auth header prefix is not what we expected. Do not attempt to
-            # authenticate.
-            return None
         
         return self._authenticate_credentials(request, token)
 
@@ -78,17 +74,15 @@ class JWTAuthentication(authentication.BaseAuthentication):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY)
         except:
-            msg = 'Invalid authentication. Could not decode token.'
+            msg = COULD_NOT_DECODE_TOKEN
             raise exceptions.AuthenticationFailed(msg)
 
         try:
             user = User.objects.get(pk=payload['id'])
         except User.DoesNotExist:
-            msg = 'No user matching this token was found.'
-            raise exceptions.AuthenticationFailed(msg)
+            raise exceptions.AuthenticationFailed(DELETED_USER)
 
         if not user.is_active:
-            msg = 'This user has been deactivated.'
-            raise exceptions.AuthenticationFailed(msg)
+            raise exceptions.AuthenticationFailed(DEACTIVATED_USER)
 
         return (user, token)

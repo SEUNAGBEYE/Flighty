@@ -8,12 +8,14 @@ from rest_framework.views import APIView
 from rest_framework.generics import RetrieveUpdateAPIView
 
 from .serializers import (RegistrationSerializer, LoginSerializer, UserSerializer)
-from .renderers import UserJSONRenderer
 
 from rest_framework.generics import RetrieveAPIView
 
 
 from .models import UserProfile
+from .messages.success import USER_CREATED, LOGIN_SUCCESSFULL, PROFILE_UPDATED, USER_RETRIEVED
+
+from flighty.response import success_response
 
 
 class RegistrationAPIView(APIView):
@@ -21,7 +23,6 @@ class RegistrationAPIView(APIView):
 
     # Allow any user (authenticated or not) to hit this endpoint.
     permission_classes = (AllowAny,)
-    renderer_classes = (UserJSONRenderer,)
     serializer_class = RegistrationSerializer
 
     def post(self, request):
@@ -41,12 +42,11 @@ class RegistrationAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return success_response(serializer.data, USER_CREATED, status.HTTP_201_CREATED)
 
 
 class LoginAPIView(APIView):
     permission_classes = (AllowAny,)
-    renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
 
     def post(self, request):
@@ -59,11 +59,10 @@ class LoginAPIView(APIView):
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(serializer.data, LOGIN_SUCCESSFULL,status=status.HTTP_200_OK)
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
-    renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -72,7 +71,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         # can be JSONified and sent to the client.
         serializer = self.serializer_class(request.user)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(serializer.data, USER_RETRIEVED,status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         data = request.data
@@ -89,4 +88,4 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(serializer.data, PROFILE_UPDATED, status.HTTP_200_OK)

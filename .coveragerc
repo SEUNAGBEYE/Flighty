@@ -1,0 +1,8 @@
+[run]
+branch = True
+omit =
+    manage.py
+    */wsgi.py
+    */tests/*
+    */tasks.py
+    */locust.py

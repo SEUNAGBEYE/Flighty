@@ -8,6 +8,10 @@ django = "*"
 yapf = "*"
 celery = "==4.2.1"
 pillow = "*"
+locustio = "*"
+coveralls = "*"
+coverage = "*"
+factory-boy = "*"
 
 [dev-packages]
 

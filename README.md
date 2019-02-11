@@ -1,5 +1,7 @@
 ## Flighty
 
+[![Coverage Status](https://coveralls.io/repos/github/SEUNAGBEYE/Flighty/badge.svg?branch=develop)](https://coveralls.io/github/SEUNAGBEYE/Flighty?branch=develop)
+
 A flight booking app to automate processes around booking flights.
 
 
@@ -13,6 +15,12 @@ A flight booking app to automate processes around booking flights.
 - Make flight reservations
 - Purchase tickets
  
+## Technologies Used
+
+- DRF (API)
+- RabbitMQ (Message Broker)
+- Celery (Tasks Management)
+- POSTMAN (API Documentation)
 
 
 ### API Documentation
@@ -115,6 +123,16 @@ EMAIL_HOST_PASSWORD = <password for the above email address>
     ```
     exit
     ```
+
+- Run Test
+```
+coverage run --source='.' manage.py test user
+```
+
+- Generate html report
+```
+coverage html
+```
 
 ## Contribution guide
 
