@@ -1,18 +1,28 @@
 language: python
-python:
-  - "3.7.0"
+matrix:
+  include:
+    - python: 3.7
+      dist: xenial
+      sudo: true
 
 services: 
   - rabitmq
+  - sqlite3
 
 env:
-  - DJANGO=2.1.3
+  - DJANGO=2.1
+
 before_install:
   - export DJANGO_SETTINGS_MODULE=flighty.settings
+  - export PYTHONPATH=$HOME/builds/SEUNAGBEYE/Flighty
+
 install:
   - pip install pipenv
   - pipenv install
 
 script:
-  - sh ./build.sh
+  - python manage.py collectstatic --noinput --settings=flighty.settings
+  - coverage run --source=. manage.py test
+
+after_success:
   - coveralls

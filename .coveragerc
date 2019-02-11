@@ -1,8 +1,13 @@
 [run]
 branch = True
 omit =
+    */apps.py
     manage.py
     */wsgi.py
     */tests/*
     */tasks.py
-    */locust.py
+    */migrations.py
+    media
+    */flighty/settings.py
+    */flighty/celery.py
+    locust.py

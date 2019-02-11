@@ -12,6 +12,9 @@ locustio = "*"
 coveralls = "*"
 coverage = "*"
 factory-boy = "*"
+djangorestframework = "*"
+pyjwt = "*"
+pyyaml = "*"
 
 [dev-packages]
 

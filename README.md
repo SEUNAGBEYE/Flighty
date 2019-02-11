@@ -125,14 +125,22 @@ EMAIL_HOST_PASSWORD = <password for the above email address>
     ```
 
 - Run Test
-```
-coverage run --source='.' manage.py test user
-```
+  ```
+  coverage run --source='.' manage.py test user
+  ```
+
+- Test coverage
+
+  ```
+  coverage report
+  ```
+
 
 - Generate html report
-```
-coverage html
-```
+
+  ```
+  coverage html
+  ```
 
 ## Contribution guide
 

@@ -11,7 +11,7 @@ from .views import (
 
 app_name = 'flight'
 urlpatterns = [
-    url(r'^$', FlightListCreate.as_view()),
-    url(r'^(?P<id>\d+)$', FlightRetrieveUpdateDestroyAPIView.as_view()),
-    url(r'^(?P<id>\d+)/reservations', FlightReservation.as_view()),
+    url(r'^$', FlightListCreate.as_view(), name='flight-create-list'),
+    url(r'^(?P<id>\d+)$', FlightRetrieveUpdateDestroyAPIView.as_view(), name='flight-retrieve-update'),
+    url(r'^(?P<id>\d+)/reservations', FlightReservation.as_view(), name='flight-reservations'),
 ]

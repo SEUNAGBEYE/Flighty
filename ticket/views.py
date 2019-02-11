@@ -15,6 +15,8 @@ from .permissions import TicketPermission
 from .renderers import TicketJSONRenderer
 
 from .tasks import send_e_ticket
+from .messages.success import TICKET_CREATED, TICKET_FETCHED, TICKET_UPDATED, TICKETS_FETCHED
+from flighty.response import success_response
 
 
 class TicketListCreate(APIView):
@@ -30,7 +32,7 @@ class TicketListCreate(APIView):
 
         response = Ticket.objects.filter(user__pk=request.user.id)
         serializer = self.serializer_class(response, many=True)
-        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+        return success_response(serializer.data, TICKETS_FETCHED, status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
         """Purchases or Books a ticket"""
@@ -40,7 +42,7 @@ class TicketListCreate(APIView):
         _, created = serializer.create()
         if created:
             send_e_ticket.delay(serializer.data, request.user.email, 'Your E Ticket')
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return success_response(serializer.data, TICKET_CREATED, status.HTTP_201_CREATED)
 
 class TicketRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = (TicketPermission,)
@@ -52,7 +54,7 @@ class TicketRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         ticket = get_object_or_404(Ticket.objects.all(), pk=kwargs['id'])
         serializer = self.serializer_class(ticket)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(serializer.data, TICKET_FETCHED, status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         """Updates a ticket information"""
@@ -66,4 +68,4 @@ class TicketRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(serializer.data, TICKET_UPDATED, status.HTTP_200_OK)

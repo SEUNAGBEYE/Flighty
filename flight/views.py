@@ -13,6 +13,9 @@ from .models import Flight
 from ticket.models import Passenger
 
 from .permissions import IsAdminUserOrReadOnly
+from flighty.response import success_response, failure_response
+from flight.messages.success import FLIGHT_CREATED, FLIGHT_FETCHED, FLIGHTS_FETCHED, FLIGHT_UPDATED
+from flight.messages.error import INVALID_DATE
 
 
 class FlightListCreate(APIView):
@@ -24,7 +27,7 @@ class FlightListCreate(APIView):
 
         response= Flight.objects.all()
         serializer = self.serializer_class(response, many=True)
-        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+        return success_response(serializer.data, FLIGHTS_FETCHED, status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
         """Creates flights"""
@@ -32,7 +35,8 @@ class FlightListCreate(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.create()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return success_response(serializer.data, FLIGHT_CREATED, status.HTTP_201_CREATED)
 
 
 class FlightRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -52,7 +56,7 @@ class FlightRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         flight = get_object_or_404(Flight.objects.all(), pk=kwargs['id'])
         serializer = self.serializer_class(flight)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(serializer.data, FLIGHT_FETCHED, status.HTTP_200_OK)
     
     def update(self, request, *args, **kwargs):
         """Updates a flight"""
@@ -67,7 +71,7 @@ class FlightRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return success_response(serializer.data, FLIGHT_UPDATED, status.HTTP_200_OK)
 
 
 class FlightReservation(APIView):
@@ -82,11 +86,12 @@ class FlightReservation(APIView):
         try:
             date = datetime.strptime(date_string, '%Y-%m-%d')
         except Exception as e:
+            
+            error = {
+                'date': [INVALID_DATE.format(date_string)]
+            }
 
-            response = {'errors': {
-                'date': [f'date={date_string} does not match this format Y-M-D']
-            }}
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return failure_response(error, INVALID_DATE, status.HTTP_400_BAD_REQUEST)
 
         flight = get_object_or_404(Flight.objects.all(), pk=kwargs['id'])
 
@@ -94,8 +99,10 @@ class FlightReservation(APIView):
         reservations = Passenger.objects.filter(ticket__is_ticketed=True, ticket__flight_id=flight.id, ticket__created_at__date=date).count()
         available_seats = flight.travellers_capacity - reservations
         serializer = self.serializer_class(flight)
-        return Response({'data': {
+        reservations = {
             'reservations': reservations,
             'available_seats': available_seats,
             'flight': serializer.data
-        }}, status=status.HTTP_200_OK)
+        }
+
+        return success_response(reservations, '', status.HTTP_200_OK)
