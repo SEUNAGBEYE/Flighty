@@ -3,6 +3,8 @@ import io
 
 from PIL import Image
 
+from unittest.mock import patch
+
 
 from django.urls import reverse
 from django.test import TestCase
@@ -196,7 +198,6 @@ class TestUserEndpoint(APITestCase):
         data = {
             'image': self._generate_passport()
         }
-        
         response = self.client.patch(url, 
         data, format='multipart', HTTP_AUTHORIZATION=self._header)
         response_data = response.data

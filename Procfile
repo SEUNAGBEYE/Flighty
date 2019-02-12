@@ -1,2 +1,2 @@
 web: gunicorn flighty.wsgi --log-file -
-worker: celery -A config worker --beat --loglevel=info
+worker: celery -A flighty worker --beat --loglevel=info

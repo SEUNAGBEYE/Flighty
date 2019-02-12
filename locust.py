@@ -1,7 +1,7 @@
 import json
 from os import environ
 
-from locust import Locust, TaskSet, task
+from locust import HttpLocust, TaskSet, task
 
 class UserBahaviour(TaskSet):
     token = None
@@ -42,7 +42,7 @@ class UserBahaviour(TaskSet):
 
 
 
-class FlightyAPILocust(Locust):
+class FlightyAPILocust(HttpLocust):
     task_set = UserBahaviour
     min_wait = 5000
     max_wait = 15000

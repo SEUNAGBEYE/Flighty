@@ -1,12 +1,13 @@
 """User Serializers"""
 from datetime import datetime
+import os
 
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
 from .models import User, UserProfile
-from .tasks import delete_passport_image
 from .messages.error import LOGIN_FAIL
+
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -153,7 +154,10 @@ class UserSerializer(serializers.ModelSerializer):
         if delete_image:
             data['userprofile']['image'] = ''
             if image_path:
-                delete_passport_image.delay(image_path.path)
+                try:
+                    os.remove(image_path.path)
+                except FileNotFoundError:
+                    print('File not found')
 
         image = data['userprofile'].get('image')
         if not delete_image and image:
