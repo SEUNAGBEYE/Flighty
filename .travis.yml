@@ -22,7 +22,4 @@ install:
 
 script:
   - python manage.py collectstatic --noinput --settings=flighty.settings
-  - coverage run --source=. manage.py test
-
-after_success:
-  - coveralls
+  - sh ./build.sh

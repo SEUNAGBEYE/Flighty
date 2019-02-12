@@ -39,7 +39,7 @@ EMAIL_USE_TLS = True
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
 CELERY_TIMEZONE = 'Africa/Lagos'
 
-ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '.herokuapp.com']
 
 
 # Application definition
