@@ -17,23 +17,13 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
     def authenticate(self, request):
         """
-        The `authenticate` method is called on every request regardless of
-        whether the endpoint requires authentication. 
-        `authenticate` has two possible return values:
-        1) `None` - We return `None` if we do not wish to authenticate. Usually
-                    this means we know authentication will fail. An example of
-                    this is when the request does not include a token in the
-                    headers.
-        2) `(user, token)` - We return a user/token combination when 
-                             authentication is successful.
-                            If neither case is met, that means there's an error 
-                            and we do not return anything.
-                            We simple raise the `AuthenticationFailed` 
-                            exception and let Django REST Framework
-                            handle the rest.
-        """
-        
-        request.user = None
+        Called for every request
+
+        Returns:
+            None: Returns None when a token could not be decode
+
+            token/user - Returns user's token for successful authentication
+            """
 
         return self._validate_token(request)
     
@@ -46,22 +36,13 @@ class JWTAuthentication(authentication.BaseAuthentication):
         """
 
         auth_header = authentication.get_authorization_header(request).split()
-        prefix = 'bearer'
 
-        if not auth_header:
-            return None
-        
-        if len(auth_header) == 1:
-            # Invalid token header. No credentials provided. Do not attempt to
-            # authenticate.
+        if not auth_header or len(auth_header) == 1 or len(auth_header) > 2:
             return None
 
-        elif len(auth_header) > 2:
-            # Invalid token header. The Token string should not contain spaces. Do
-            # not attempt to authenticate.
+        if auth_header[0].decode('utf-8').lower() != 'bearer':
             return None
 
-        auth_header_prefix = auth_header[0].decode('utf-8')
         token = auth_header[1].decode('utf-8')
         
         return self._authenticate_credentials(request, token)

@@ -96,7 +96,6 @@ class TestFlightEndpoint(APITestCase):
             'passengers': [{}],
             'flight_id': self.flight.id
         }
-        print('=========+>>>>Ticket')
 
 
     # @patch('ticket.tasks.send_e_ticket')

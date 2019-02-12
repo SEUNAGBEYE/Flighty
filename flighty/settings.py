@@ -39,7 +39,7 @@ EMAIL_USE_TLS = True
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
 CELERY_TIMEZONE = 'Africa/Lagos'
 
-ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '.herokuapp.com']
 
 
 # Application definition
@@ -115,6 +115,13 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
 
 
 # Password validation

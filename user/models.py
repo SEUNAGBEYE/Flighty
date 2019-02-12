@@ -12,11 +12,7 @@ from flighty.models import TimestampedModel
 
 class UserManager(BaseUserManager):
     """
-    Django requires that custom users define their own Manager class. By
-    inheriting from `BaseUserManager`, we get a lot of the same code used by
-    Django to create a `User`. 
-    All we have to do is override the `create_user` function which we will use
-    to create `User` objects.
+    Manager's class for custom users
     """
 
     def create_user(self, email, password=None):
@@ -33,7 +29,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email, password):
         """
-        Create and return a `User` with superuser (admin) permissions.
+        Creates a super user
         """
         if password is None:
             raise TypeError('Superusers must have a password.')
@@ -49,14 +45,11 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
 
     email = models.EmailField(unique=True)
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'email' # sets email to username field to be used by `authenticate()`
     objects = UserManager()
 
     is_active = models.BooleanField(default=True)
 
-    # The `is_staff` flag is expected by Django to determine who can and cannot
-    # log into the Django admin site. For most users this flag will always be
-    # false.
     is_staff = models.BooleanField(default=False)
 
     def __str__(self):
@@ -80,13 +73,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
 
         return token.decode('utf-8')
 
-    @property
+    @property # makes this method available via user.token
     def token(self):
         """
-        Allows us to get a user's token by calling `user.token` instead of
-        `user.generate_jwt_token().
-        The `@property` decorator above makes this possible. `token` is called
-        a "dynamic property".
+        Generates JWT for user
         """
         return self._generate_jwt_token()
     
@@ -95,10 +85,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
 
 class UserProfile(TimestampedModel):
     
-    # There is an inherent relationship between the Profile and
-    # User models. By creating a one-to-one relationship between the two, we
-    # are formalizing this relationship. Every user will have one -- and only
-    # one -- related Profile model.
+
     user = models.OneToOneField(
         'User', on_delete=models.CASCADE
     )
@@ -114,9 +101,7 @@ class UserProfile(TimestampedModel):
 
     def get_full_name(self):
         """
-        This method is required by Django for things like handling emails.
-        Typically this would be the user's first and last name. Since we do
-        not store the user's real name, we return their username instead.
+        Returns user's full name
         """
     
         return f'{self.first_name} {self.last_name}'.strip()
