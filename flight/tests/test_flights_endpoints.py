@@ -87,6 +87,7 @@ class TestFlightEndpoint(APITestCase):
         }
 
         self.flight = FlightFactory(**self.flight_data_two)
+        print('=========+>>>>Flight')
 
     
     def test_create_flight_with_valid_data_succeeds(self):
