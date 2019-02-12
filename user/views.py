@@ -35,9 +35,6 @@ class RegistrationAPIView(APIView):
         """
         user = request.data
 
-        # The create serializer, validate serializer, save serializer pattern
-        # below is common and you will see it a lot throughout this course and
-        # your own work later on. Get familiar with it.
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -50,12 +47,9 @@ class LoginAPIView(APIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
+        """Handles user login"""
         user = request.data
 
-        # Notice here that we do not call `serializer.save()` like we did for
-        # the registration endpoint. This is because we don't  have
-        # anything to save. Instead, the `validate` method on our serializer
-        # handles everything we need.
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
 
@@ -66,9 +60,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        # There is nothing to validate or save here. Instead, we just want the
-        # serializer to handle turning our `User` object into something that
-        # can be JSONified and sent to the client.
+        """Gets user data"""
         serializer = self.serializer_class(request.user)
 
         return success_response(serializer.data, USER_RETRIEVED,status.HTTP_200_OK)
@@ -80,8 +72,6 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
             'userprofile': data
         }
 
-        # Here is that serialize, validate, save pattern we talked about
-        # before.
         serializer = self.serializer_class(
             request.user, data=profile_data, partial=True, context={'deleteImage': request.query_params.get('deleteImage'), 'user': request.user}
         )
