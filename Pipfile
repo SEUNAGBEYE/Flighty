@@ -15,6 +15,7 @@ factory-boy = "*"
 djangorestframework = "*"
 pyjwt = "*"
 pyyaml = "*"
+gunicorn = "*"
 
 [dev-packages]
 
