@@ -2,6 +2,8 @@
 
 Raises:
     exceptions.AuthenticationFailed: Raise this exception when authentication failed
+
+Reference : https://thinkster.io/tutorials/django-json-api/authentication
 """
 
 import jwt

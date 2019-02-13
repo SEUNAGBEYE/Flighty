@@ -1,4 +1,8 @@
-"""User Serializers"""
+"""User Serializers
+
+Reference : https://thinkster.io/tutorials/django-json-api/authentication
+"""
+
 from datetime import datetime
 import os
 

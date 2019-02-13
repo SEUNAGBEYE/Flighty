@@ -1,3 +1,7 @@
+"""
+User Manager module:
+Reference : https://thinkster.io/tutorials/django-json-api/authentication
+"""
 
 from django.contrib.auth.models import BaseUserManager
 

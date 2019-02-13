@@ -1,3 +1,9 @@
+"""Model for generating timestamps
+
+Reference : https://thinkster.io/tutorials/django-json-api/authentication
+"""
+
+
 from django.db import models
 
 
