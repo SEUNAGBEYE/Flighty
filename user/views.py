@@ -1,3 +1,8 @@
+"""User view module
+
+Reference : https://thinkster.io/tutorials/django-json-api/authentication
+"""
+
 from django.shortcuts import render
 
 # Create your views here.
