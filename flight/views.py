@@ -1,5 +1,8 @@
 from datetime import datetime
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from rest_framework import status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -22,6 +25,7 @@ class FlightListCreate(APIView):
     permission_classes = (IsAdminUserOrReadOnly,)
     serializer_class = FlightSerializer
 
+    @method_decorator(cache_page(60*60))
     def get(self, request, *args, **kwargs):
         """Gets all flights"""
 
@@ -43,6 +47,7 @@ class FlightRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUserOrReadOnly,)
     serializer_class = FlightSerializer
 
+    @method_decorator(cache_page(60*60))
     def get(self, request, *args, **kwargs):
         """Gets a single flight
         """
@@ -78,6 +83,7 @@ class FlightReservation(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = FlightSerializer
 
+    @method_decorator(cache_page(60*60))
     def get(self, request, *args, **kwargs):
         """Gets the reservations for a specific flight on a specific day"""
 

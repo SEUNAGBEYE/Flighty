@@ -3,6 +3,9 @@
 Reference : https://thinkster.io/tutorials/django-json-api/authentication
 """
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -64,6 +67,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
 
+    @method_decorator(cache_page(60*60))
     def retrieve(self, request, *args, **kwargs):
         """Gets user data"""
         serializer = self.serializer_class(request.user)

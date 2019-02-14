@@ -18,6 +18,7 @@ pyyaml = "*"
 gunicorn = "*"
 pytest = "*"
 whitenoise = "*"
+python-memcached = "*"
 
 [dev-packages]
 

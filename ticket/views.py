@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 # Create your views here.
 from rest_framework import status
 from rest_framework.response import Response
@@ -24,6 +27,7 @@ class TicketListCreate(APIView):
     serializer_class = TicketSerializer
     renderer_classes = (TicketJSONRenderer, )
 
+    @method_decorator(cache_page(60*60))
     def get(self, request, *args, **kwargs):
         """Gets the current user tickets
 
@@ -48,6 +52,7 @@ class TicketRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = (TicketPermission,)
     serializer_class = TicketSerializer
 
+    @method_decorator(cache_page(60*60))
     def get(self, request, *args, **kwargs):
         """Gets a single ticket"""
 
